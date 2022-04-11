@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- displays site properly based on user's device -->
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./images/favicon-32x32.png"
+    />
+
+    <title>Frontend Mentor | Interactive rating component</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
+    <style>
+      .attribution {
+        font-size: 11px;
+        text-align: center;
+      }
+      .attribution a {
+        color: hsl(228, 45%, 44%);
+      }
+    </style>
+  </head>
+  <body class="bg-gray-900">
+    <dialog
+      id="rating-modal"
+      class="bg-gradient-to-br from-gray-600 to-gray-800 w-1/2 fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-3xl p-7 transition"
+      open
+    >
+      <div
+        class="w-12 h-12 p-3 bg-gray-500 text-orange-500 rounded-full flex items-center justify-center mb-6"
+      >
+        <img src="./images/icon-star.svg" />
+      </div>
+      <div></div>
+      <div>
+        <h1 class="text-3xl text-white font-bold mb-3">How did we do?</h1>
+        <p class="text-white text-gray-200">
+          Please let us know how we did with your support request. All feedback
+          is appreciated to help us improve our offering!
+        </p>
+      </div>
+      <ul class="flex items-center justify-between my-8" id="rating-list">
+        <li
+          data-value="1"
+          class="bg-gray-500 p-4 w-12 h-12 flex items-center text-white justify-center rounded-full hover:bg-orange-500 transition cursor-pointer"
+        >
+          1
+        </li>
+        <li
+          data-value="2"
+          class="bg-gray-500 p-4 w-12 h-12 flex items-center text-white justify-center rounded-full hover:bg-orange-500 transition cursor-pointer"
+        >
+          2
+        </li>
+        <li
+          data-value="3"
+          class="bg-gray-500 p-4 w-12 h-12 flex items-center text-white justify-center rounded-full hover:bg-orange-500 transition cursor-pointer"
+        >
+          3
+        </li>
+        <li
+          data-value="4"
+          class="bg-gray-500 p-4 w-12 h-12 flex items-center text-white justify-center rounded-full hover:bg-orange-500 transition cursor-pointer"
+        >
+          4
+        </li>
+        <li
+          data-value="5"
+          class="bg-gray-500 p-4 w-12 h-12 flex items-center text-white justify-center rounded-full hover:bg-orange-500 transition cursor-pointer"
+        >
+          5
+        </li>
+      </ul>
+      <div class="grid">
+        <button
+          id="submit-response"
+          class="py-3 rounded-full bg-orange-500 text-white uppercase font-bold hover:bg-white hover:text-orange-500 transition"
+        >
+          Submit
+        </button>
+      </div>
+    </dialog>
+
+    <dialog
+      id="success-modal"
+      class="bg-gradient-to-br from-gray-600 to-gray-800 w-1/2 fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-3xl p-7 transition"
+    >
+      <div class="flex items-center justify-center mb-6">
+        <img src="./images/illustration-thank-you.svg" alt="thank-you" />
+      </div>
+      <div class="flex items-center justify-center">
+        <span class="bg-gray-600 text-orange-400 px-4 py-2 rounded-full mb-8"
+          >You selected <span id="rated"></span> out of 5</span
+        >
+      </div>
+      <h1 class="text-white font-bold text-3xl text-center mb-4">Thank you!</h1>
+      <p class="text-gray-200 text-center">
+        We appreciate you taking the time to give a rating. If you ever need
+        more support, don’t hesitate to get in touch!
+      </p>
+    </dialog>
+
+    <div
+      class="text-white attribution absolute bottom-2 left-1/2 -translate-x-1/2"
+    >
+      Challenge by
+      <a href="https://www.frontendmentor.io?ref=challenge" target="_blank"
+        >Frontend Mentor</a
+      >. Coded by <a href="#">Your Name Here</a>.
+    </div>
+
+    <script>
+      const ratingModal = document.getElementById("rating-modal");
+      const successModal = document.getElementById("success-modal");
+      const submitButton = document.getElementById("submit-response");
+      const ratingList = document.querySelectorAll("#rating-list > li");
+      let currentSelectedValue = null;
+      if (typeof ratingModal.showModal !== "function") {
+        const h1 = document.createElement("h1");
+        h1.textContent = "Browser Do not support Modal";
+        document.appendChild(h1);
+      } else {
+        ratingList.forEach((item) => {
+          item.addEventListener("click", (e) => {
+            let element = e.target;
+            console.log(element.dataset.value);
+            element.classList.add("bg-orange-500");
+            currentSelectedValue = element.dataset.value;
+            ratingList.forEach((unselected) => {
+              if (
+                unselected !== item &&
+                unselected.classList.contains("bg-orange-500")
+              ) {
+                unselected.classList.remove("bg-orange-500");
+              }
+            });
+          });
+        });
+        submitButton.addEventListener("click", () => {
+          if (currentSelectedValue === null) {
+            return;
+          }
+          const rated = document.getElementById("rated");
+          rated.innerHTML = currentSelectedValue;
+          ratingModal.hidden = true;
+          successModal.showModal();
+        });
+      }
+    </script>
+  </body>
+</html>
